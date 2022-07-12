@@ -1,0 +1,22 @@
+.menu {
+  width: 48px;
+  height: 900px;
+  background: #82b284;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__item{
+    width: 48px;
+    height: 60px;
+    display: flex;
+
+    a{
+      margin: auto;
+    }
+  }
+}
+
+footer {
+  flex-basis: 100%;
+}

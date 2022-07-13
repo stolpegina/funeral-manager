@@ -5,14 +5,16 @@ import Input from "../../ui-components/Input/Input";
 const SignIn = () => {
   const [username, setusername] = useState('')
   const saveToken = (token: any) => {
-    sessionStorage.setItem("tokenData", JSON.stringify(token));
+    sessionStorage.setItem("tokenData", token);
   };
 
-  const resp = auth(username);
+  const resp = auth('username');
 
   resp.then((res) => {
     if (res.status === 200) {
       const tokenData = res.headers.get("Authorization");
+      console.log(tokenData);
+      
       saveToken(tokenData);
       return Promise.resolve();
     }

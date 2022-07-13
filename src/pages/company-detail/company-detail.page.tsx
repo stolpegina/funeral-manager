@@ -5,8 +5,6 @@ import { Route, useNavigate } from 'react-router-dom';
 import './company-detail.styles.scss';
 
 const CompanyDetail = () => {
-
-
     return (
       <div className="company-detail">
         <SideMenu />

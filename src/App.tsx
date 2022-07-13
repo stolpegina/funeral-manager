@@ -10,12 +10,13 @@ import NotFound from "./pages/not-found/not-found.page";
 import {Layout} from "./components/Layout/Layout";
 
 function App() {
+  const isAuth = sessionStorage.getItem("tokenData");
 
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<SignIn />} />
+          <Route index element={ isAuth ? <NotFound /> : <SignIn />} />
           <Route path="companies" element={<CompaniesList />} />
           <Route path="companies/company-detail" element={<CompanyDetail />} />
           <Route path="*" element={<NotFound />} />

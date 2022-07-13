@@ -6,28 +6,34 @@
     margin: 20px;
   }
 
+  h3 {
+    margin-right: 20px;
+  }
+
   h4 {
     display: inline-block;
   }
   span {
-    margin: 20px;
+    margin: 0 20px;
   }
 
   &__bar {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 40px;
+    padding: 26px;
     justify-content: space-between;
     width: 100%;
 
     background: #ffffff;
 
     border: 1px solid #e5e5e5;
-
-    &__goback {
-      cursor: pointer;
-    }
+  }
+  &__goback {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #82b284;
   }
 
   &__company {
@@ -41,6 +47,11 @@
   &__photo {
     text-align: left;
     margin: 20px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
   }
 }
 .border {
@@ -59,25 +70,26 @@
   width: 300px;
   background: #ffffff;
   padding: 24px;
+  box-shadow: 5px 5px 5px #e5e5e5;
+  border: 1px solid #e5e5e5;
 
   button {
-    color: #B9B9B9;
+    color: #b9b9b9;
     background: none;
     border: none;
     cursor: pointer;
     margin-top: 20px;
     padding: 0;
   }
-  
-  .button-container{
+
+  .button-container {
     display: flex;
     justify-content: space-between;
   }
 }
 
 .ReactModal__Overlay--after-open {
-  background: #2d2d2d;
-  transform: 0.5;
+  background-color: #2d2d2d;
   :focus-visible {
     outline: none;
   }

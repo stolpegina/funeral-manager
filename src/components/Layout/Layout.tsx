@@ -45,7 +45,7 @@ const Layout = () => {
           </div>
 
           <div className="menu__item">
-            <Link to="exit">
+            <Link to="exit" onClick={() => {sessionStorage.removeItem("tokenData");}}>
               <ExitLogo />
             </Link>
           </div>

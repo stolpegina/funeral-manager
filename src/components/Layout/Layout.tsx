@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet } from "react-router-dom";
 import "./Layout.styles.scss";
 import { ReactComponent as HomeLogo } from "../../assets/Home.svg";
 import { ReactComponent as CompanyLogo } from "../../assets/Market.svg";
@@ -14,48 +14,52 @@ const Layout = () => {
       <div className="menu">
         <div>
           <div className="menu__item">
-            <Link to="/">
+            <NavLink to="/">
               <HomeLogo />
-            </Link>
+            </NavLink>
           </div>
 
           <div className="menu__item">
-            <Link to="companies">
+            <NavLink to="companies">
               <CompanyLogo />
-            </Link>
+            </NavLink>
           </div>
 
           <div className="menu__item">
-            <Link to="search-page">
+            <NavLink to="search-page">
               <SearchLogo />
-            </Link>
+            </NavLink>
           </div>
         </div>
         <div>
           <div className="menu__item">
-            <Link to="settings">
+            <NavLink to="settings">
               <SettingsLogo />
-            </Link>
+            </NavLink>
           </div>
 
           <div className="menu__item">
-            <Link to="chat">
+            <NavLink to="chat">
               <ChatLogo />
-            </Link>
+            </NavLink>
           </div>
 
           <div className="menu__item">
-            <Link to="exit" onClick={() => {sessionStorage.removeItem("tokenData");}}>
+            <NavLink
+              to="exit"
+              onClick={() => {
+                sessionStorage.removeItem("tokenData");
+              }}
+            >
               <ExitLogo />
-            </Link>
+            </NavLink>
           </div>
         </div>
       </div>
       <Outlet />
       <footer>
         © 1992 - 2020 Честный Агент © Все права защищены.
-        <br/>
-        8 (495) 150-21-12
+        <br />8 (495) 150-21-12
       </footer>
     </>
   );

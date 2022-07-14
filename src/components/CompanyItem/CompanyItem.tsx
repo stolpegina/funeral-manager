@@ -1,14 +1,17 @@
-import React from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import './CompanyItem.styles.scss';
+import { getCompany } from "../../api";
+import "./CompanyItem.styles.scss";
 
-const CompanyItem = () => {
+interface Props {
+  name: any;
+}
+
+const CompanyItem: FC<Props> = ({ name }) => {
   return (
-    <div>
-      <div className="company-item">
-        <Link to="company-detail">Название компании</Link>
-      </div>
-    </div>
+    <Link className="company-item" to="company-detail">
+      {name}
+    </Link>
   );
 };
 

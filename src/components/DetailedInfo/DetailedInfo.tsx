@@ -10,17 +10,6 @@ import Modal from "react-modal";
 import { getCompany, getContacts, getImages } from "../../api";
 import EditButton from "../../ui-components/EditButton/EditButton";
 
-const dataContacts1 = {
-  id: "16",
-  lastname: "Григорьев",
-  firstname: "Сергей",
-  patronymic: "Петрович",
-  phone: "79162165588",
-  email: "grigoriev@funeral.com",
-  createdAt: "2020-11-21T08:03:26.589Z",
-  updatedAt: "2020-11-23T09:30:00Z",
-};
-
 const DetailedInfo = () => {
   const [data, setData] = useState<any>(null);
   const [dataContacts, setDataContacts] = useState<any>(null);
@@ -31,7 +20,7 @@ const DetailedInfo = () => {
       setData(data);
 
       const dataContacts = await getContacts(16).then((resp) => resp.json());
-      setDataContacts(dataContacts);      
+      setDataContacts(dataContacts);
     };
     fetchData();
   }, []);
@@ -51,19 +40,17 @@ const DetailedInfo = () => {
     window.location.reload();
   };
 
-  const deleteItem = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
   const editData = () => {
     console.log("редактор");
   };
 
-  if (!data || !dataContacts) return null;
+  const deleteItem = () => {};
+
+  if (!data || !dataContacts) return (
+    <div className="detailed-info">
+      <div className="spinner"></div>
+    </div>
+  );
 
   return (
     <div className="detailed-info">
@@ -74,7 +61,7 @@ const DetailedInfo = () => {
         <div className="detailed-info__buttons">
           <LinkedLogo onClick={copyLink} />
           <RotationLogo onClick={reloadPage} />
-          <DeleteLogo onClick={deleteItem} />
+          <DeleteLogo onClick={() => setModalIsOpen(true)} />
         </div>
       </div>
       <div className="detailed-info__head">
@@ -109,7 +96,7 @@ const DetailedInfo = () => {
         <h4>ФИО:</h4>
         <span>
           {dataContacts.lastname} {dataContacts.firstname}
-           {dataContacts.patronymic}
+          {dataContacts.patronymic}
         </span>
         <br />
         <h4>Телефон:</h4>
@@ -125,15 +112,15 @@ const DetailedInfo = () => {
       </div>
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={closeModal}
+        onRequestClose={() => setModalIsOpen(false)}
         contentLabel="Удалить карточку"
         className="modal"
       >
         <h2>Удалить карточку</h2>
         <div>Отправить карточку организации в архив?</div>
         <div className="button-container">
-          <button onClick={closeModal}>ОТМЕНА</button>
-          <button>УДАЛИТЬ</button>
+          <button onClick={() => setModalIsOpen(false)}>ОТМЕНА</button>
+          <button onClick={deleteItem}>УДАЛИТЬ</button>
         </div>
       </Modal>
     </div>

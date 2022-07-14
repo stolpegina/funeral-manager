@@ -6,12 +6,14 @@ import { ReactComponent as BuildingLogo } from "../../assets/Building.svg";
 const SideMenu = () => {
   return (
     <div className="side-menu">
-      <div>
+      <div className="side-menu__info">
         <p>ЧЕСТНЫЙ АГЕНТ</p>
         <p>МЕНЕДЖЕР ПРОЦЕССА</p>
-        <div className="side-menu__item">
-          <Link to="/companies"><BuildingLogo /> Организации</Link>
-        </div>
+      </div>
+      <div className="side-menu__item">
+        <Link to="/companies">
+          <BuildingLogo /> Организации
+        </Link>
       </div>
     </div>
   );

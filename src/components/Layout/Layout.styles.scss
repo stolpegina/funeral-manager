@@ -6,13 +6,20 @@
   flex-direction: column;
   justify-content: space-between;
 
-  &__item{
-    width: 48px;
-    height: 60px;
-    display: flex;
+  &__item {
+    .active {
+      background: #A4C7A5;
+    }
 
-    a{
+    a {
+      display: flex;
+      width: 48px;
+      height: 60px;
       margin: auto;
+
+      svg {
+        margin: auto;
+      }
     }
   }
 }

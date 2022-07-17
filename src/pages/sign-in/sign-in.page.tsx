@@ -22,7 +22,7 @@ const SignIn = () => {
   });
   return (
     <form >
-      <Input />
+      <Input text="Логин" />
     </form>
   );
 };

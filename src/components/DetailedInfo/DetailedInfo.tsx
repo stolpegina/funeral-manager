@@ -10,6 +10,8 @@ import Modal from "react-modal";
 import { getCompany, getContacts, getImages } from "../../api";
 import EditButton from "../../ui-components/EditButton/EditButton";
 import { ReactComponent as SaveLogo } from "../../assets/Save.svg";
+import moment from "moment";
+import Button from "../../ui-components/Button/Button";
 
 const DetailedInfo = () => {
   const [data, setData] = useState<any>(null);
@@ -69,103 +71,153 @@ const DetailedInfo = () => {
           <DeleteLogo onClick={() => setModalIsOpen(true)} />
         </div>
       </div>
-      <div className="detailed-info__head">
-        {isEditTitle ? (
-          <>
-            <Input text="Короткое наименование" /> <SaveLogo />
-          </>
-        ) : (
-          <>
-            <h2>{data.shortName}</h2>{" "}
+      <div className="detailed-info__container">
+        <div className="detailed-info__head">
+          {isEditTitle ? (
+            <>
+              <Input
+                text="Короткое наименование"
+                initialValue={data.shortName}
+              />{" "}
+              <SaveLogo />
+            </>
+          ) : (
+            <>
+              <h2 className="detailed-info__title">{data.shortName}</h2>{" "}
+              <EditButton
+                edit={() => {
+                  setIsEditTitle(true);
+                }}
+              />
+            </>
+          )}
+        </div>
+
+        <div className="detailed-info__company">
+          <div className="detailed-info__head">
+            <h3 className="detailed-info__section-title">Общая информация</h3>{" "}
             <EditButton
               edit={() => {
-                setIsEditTitle(true);
+                setIsEditInfo(true);
               }}
             />
-          </>
-        )}
-      </div>
+          </div>
 
-      <div className="detailed-info__company">
-        <div className="detailed-info__head">
-          <h3>Общая информация</h3>{" "}
-          <EditButton
-            edit={() => {
-              setIsEditInfo(true);
-            }}
-          />
-        </div>
+          {isEditInfo ? (
+            <Input text="Полное название" initialValue={data.name} />
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Полное название:</h4>
+              <span>{data.name}</span>
+            </>
+          )}
+          <br />
+          {isEditInfo ? (
+            <>
+              <Input text="Номер договора" initialValue={data.contract.no} />
+              <Input
+                text="Дата договора"
+                initialValue={data.contract.issue_date}
+              />
+            </>
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Договор:</h4>
+              <span>
+                {data.contract.no} от{" "}
+                {moment(data.contract.issue_date).format("DD.MM.YYYY")}
+              </span>
+            </>
+          )}
+          <br />
 
-        <h4>Полное название:</h4>
-        {isEditInfo ? <Input /> : <span>{data.name}</span>}
-        <br />
-        <h4>Договор:</h4>
-        {isEditInfo ? (
-          <Input />
-        ) : (
-          <span>
-            {data.contract.no} {data.contract.issue_date}
-          </span>
-        )}
-        <br />
-        <h4>Форма:</h4>
-        {isEditInfo ? <Input /> : <span>{data.businessEntity}</span>}
-        <br />
-        <h4>Тип:</h4>
-        {isEditInfo ? <Input /> : <span>{data.type}</span>}
-      </div>
-      <div className="border"></div>
-      <div className="detailed-info__contact">
-        <div className="detailed-info__head">
-          <h3>КОНТАКТНЫЕ ДАННЫЕ</h3>{" "}
-          <EditButton
-            edit={() => {
-              setIsEditContacts(true);
-            }}
-          />
+          {isEditInfo ? (
+            <Input text="Форма" initialValue={data.businessEntity} />
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Форма:</h4>
+              <span>{data.businessEntity}</span>
+            </>
+          )}
+          <br />
+
+          {isEditInfo ? (
+            <Input text="Тип" initialValue={data.type} />
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Тип:</h4>
+              {data.type.map((item: string) => (
+                <span>{item === "agent" ? "Агент" : "Подрядчик"}</span>
+              ))}
+            </>
+          )}
         </div>
-        <h4>ФИО:</h4>
-        {isEditContacts ? (
-          <Input />
-        ) : (
-          <span>
-            {dataContacts.lastname} {dataContacts.firstname}
-            {dataContacts.patronymic}
-          </span>
-        )}
-        <br />
-        <h4>Телефон:</h4>
-        {isEditContacts ? (
-          <Input text="Телефон:" />
-        ) : (
-          <span>{dataContacts.phone}</span>
-        )}
-        <br />
-        <h4>Эл. почта:</h4>
-        {isEditContacts ? (
-          <Input text="Эл. почта:" />
-        ) : (
-          <span>{dataContacts.email}</span>
-        )}
-      </div>
-      <div className="border"></div>
-      <div className="detailed-info__photo">
-        <h3>ПРИЛОЖЕННЫЕ ФОТО</h3>
-        <button>ДОБАВИТЬ ИЗОБРАЖЕНИЕ</button>
-      </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        contentLabel="Удалить карточку"
-        className="modal"
-      >
-        <h2>Удалить карточку</h2>
-        <div>Отправить карточку организации в архив?</div>
-        <div className="button-container">
-          <button onClick={() => setModalIsOpen(false)}>ОТМЕНА</button>
-          <button onClick={deleteItem}>УДАЛИТЬ</button>
+        <div className="border"></div>
+        <div className="detailed-info__contact">
+          <div className="detailed-info__head">
+            <h3 className="detailed-info__section-title">КОНТАКТНЫЕ ДАННЫЕ</h3>{" "}
+            <EditButton
+              edit={() => {
+                setIsEditContacts(true);
+              }}
+            />
+          </div>
+          {isEditContacts ? (
+            <>
+              <Input text="Фамилия" initialValue={dataContacts.lastname} />
+              <Input text="Имя" initialValue={dataContacts.firstname} />
+              <Input text="Отчество" initialValue={dataContacts.patronymic} />
+            </>
+          ) : (
+            <>
+              <h4 className="detailed-info__label">ФИО:</h4>
+              <span>
+                {dataContacts.lastname} {dataContacts.firstname}
+                {dataContacts.patronymic}
+              </span>
+            </>
+          )}
+          <br />
+
+          {isEditContacts ? (
+            <Input text="Телефон:" initialValue={dataContacts.phone} />
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Телефон:</h4>
+              <span>{dataContacts.phone}</span>
+            </>
+          )}
+          <br />
+
+          {isEditContacts ? (
+            <Input text="Эл. почта:" initialValue={dataContacts.email} />
+          ) : (
+            <>
+              <h4 className="detailed-info__label">Эл. почта:</h4>
+              <span>{dataContacts.email}</span>
+            </>
+          )}
         </div>
-      </Modal>
+        <div className="border"></div>
+        <div className="detailed-info__photo">
+          <h3 className="detailed-info__section-title">ПРИЛОЖЕННЫЕ ФОТО</h3>
+          <Button name="ДОБАВИТЬ ИЗОБРАЖЕНИЕ" />
+        </div>
+        <div className="border"></div>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          contentLabel="Удалить карточку"
+          className="modal"
+        >
+          <h2>Удалить карточку</h2>
+          <div>Отправить карточку организации в архив?</div>
+          <div className="button-container">
+            <button onClick={() => setModalIsOpen(false)}>ОТМЕНА</button>
+            <button onClick={deleteItem}>УДАЛИТЬ</button>
+          </div>
+        </Modal>
+      </div>
     </div>
   );
 };

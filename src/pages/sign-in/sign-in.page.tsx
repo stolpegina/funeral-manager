@@ -21,8 +21,8 @@ const SignIn = () => {
     return Promise.reject();
   });
   return (
-    <form >
-      <Input text="Логин" />
+    <form>
+      <Input text="Логин" initialValue=''/>
     </form>
   );
 };

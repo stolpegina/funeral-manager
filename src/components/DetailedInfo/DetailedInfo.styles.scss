@@ -1,7 +1,11 @@
 .detailed-info {
   width: 100%;
+  box-shadow: -6px -6px 12px -6px #b9b9b9;
 
-
+  &__container {
+    margin: 0 40px;
+    text-align: left;
+  }
 
   &__bar {
     display: flex;
@@ -22,22 +26,22 @@
     color: #82b284;
   }
 
-  &__company {
-    text-align: left;
-    margin: 20px;
-  }
-  &__contact {
-    text-align: left;
-    margin: 20px;
-  }
-  &__photo {
-    text-align: left;
-    margin: 20px;
-  }
-
   &__head {
     display: flex;
     align-items: center;
+  }
+  &__title {
+    font-weight: 400;
+    font-size: 20px;
+    margin: 24px 0;
+  }
+  &__section-title {
+    font-weight: 300;
+    font-size: 16px;
+    margin: 24px 0 20px;
+  }
+  &__label {
+    display: inline-block;
   }
 }
 .border {

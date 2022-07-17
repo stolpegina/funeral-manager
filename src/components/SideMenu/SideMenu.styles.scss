@@ -1,16 +1,30 @@
 .side-menu {
   background: #f7f7f7;
 
-  a {
-    display: flex;
-  }
-
-  &__info{
+  &__info {
     margin: 20px 42px;
   }
 
   &__item {
     padding: 12px 52px 12px 16px;
     background: #eeeeee;
+  }
+
+  &__link {
+    color: #82b284;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+  
+  }
+
+  &__title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  &__position {
+    font-size: 12px;
   }
 }

@@ -7,11 +7,11 @@ const SideMenu = () => {
   return (
     <div className="side-menu">
       <div className="side-menu__info">
-        <p>ЧЕСТНЫЙ АГЕНТ</p>
-        <p>МЕНЕДЖЕР ПРОЦЕССА</p>
+        <p className="side-menu__title">ЧЕСТНЫЙ АГЕНТ</p>
+        <p className="side-menu__position">МЕНЕДЖЕР ПРОЦЕССА</p>
       </div>
       <div className="side-menu__item">
-        <Link to="/companies">
+        <Link className="side-menu__link" to="/companies">
           <BuildingLogo /> Организации
         </Link>
       </div>

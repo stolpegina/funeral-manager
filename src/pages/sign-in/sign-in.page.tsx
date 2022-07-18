@@ -21,8 +21,15 @@ const SignIn = () => {
     return Promise.reject();
   });
   return (
-    <form>
-      <Input text="Логин" initialValue=''/>
+    <form onSubmit={(e) => {
+      auth(username);
+    }}>
+      <Input
+        text="Логин"
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
+      />
+      <button type="submit">Войти</button>
     </form>
   );
 };

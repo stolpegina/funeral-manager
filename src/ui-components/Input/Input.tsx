@@ -3,18 +3,20 @@ import "./Input.styles.scss";
 
 interface Props {
   text: string;
-  initialValue: string;
+  value: string;
+  date?: boolean;
+  onChange?: (value: any) => void;
 }
 
-const Input: FC<Props> = ({ text, initialValue }) => {
-  const [value, setValue] = useState<string| undefined>(initialValue);
+const Input: FC<Props> = ({ text, value, date = false, onChange}) => {
   return (
     <div className="input-block">
       {value && <label className="input-block__label">{text}</label>}
       <input
         placeholder={text}
-        onChange={(e) => setValue(e.target.value)}
         value={value}
+        type={date ? "date" : "text"}
+        onChange={onChange && ((value) =>  onChange(value))}
       />
     </div>
   );

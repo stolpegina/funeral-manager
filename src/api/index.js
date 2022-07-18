@@ -5,8 +5,9 @@ export const auth = (username) => {
   return response;
 };
 
+const token = sessionStorage.getItem("tokenData");
+
 export const getCompany = (id) => {
-  const token = sessionStorage.getItem('tokenData');
   const response = fetch(`/companies/${id}`, {
     method: "GET",
     headers: {
@@ -15,10 +16,23 @@ export const getCompany = (id) => {
     },
   });
   return response;
-}
+};
+
+//TODO: не работает обновление даты договора
+
+export const updateCompany = (id, data) => {
+  const response = fetch(`/companies/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response;
+};
 
 export const deleteCompany = (id) => {
-  const token = sessionStorage.getItem("tokenData");
   const response = fetch(`/companies/${id}`, {
     method: "DELETE",
     headers: {
@@ -30,7 +44,6 @@ export const deleteCompany = (id) => {
 };
 
 export const getContacts = (id) => {
-  const token = sessionStorage.getItem("tokenData");
   const response = fetch(`/contacts/${id}`, {
     method: "GET",
     headers: {
@@ -41,10 +54,34 @@ export const getContacts = (id) => {
   return response;
 };
 
-export const getImages = (id) => {
-  const token = sessionStorage.getItem("tokenData");
+export const updateContacts = (id, data) => {
+  const response = fetch(`/contacts/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response;
+};
+
+//TODO: посмотреть запрос на добавление
+
+export const addImage = (id) => {
   const response = fetch(`/contacts/${id}/image`, {
-    method: "GET",
+    method: "POST",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
+
+export const deleteImage = (id, imageName) => {
+  const response = fetch(`/companies/${id}/image/${imageName}`, {
+    method: "DELETE",
     headers: {
       Authorization: token,
       "Content-Type": "application/json",

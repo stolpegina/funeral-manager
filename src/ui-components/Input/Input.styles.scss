@@ -23,7 +23,7 @@ input {
     border: 1px solid #808080;
   }
 
-  &:focus {
+  &:focus, &:active, &:focus-visible {
     border: 1px solid #3b3b3b;
   }
 }

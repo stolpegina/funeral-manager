@@ -1,38 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../ui-components/Input/Input";
-import "./DetailedInfo.styles.scss";
 import { ReactComponent as LinkedLogo } from "../../assets/Linked.svg";
 import { ReactComponent as RotationLogo } from "../../assets/Rotation.svg";
 import { ReactComponent as DeleteLogo } from "../../assets/Delete.svg";
 import { ReactComponent as LongLogo } from "../../assets/Long.svg";
 import Modal from "react-modal";
 import {
+  addImage,
   deleteCompany,
+  deleteImage,
   getCompany,
   getContacts,
   updateCompany,
   updateContacts,
 } from "../../api";
-import EditButton from "../../ui-components/EditButton/EditButton";
-import { ReactComponent as SaveLogo } from "../../assets/Save.svg";
-import moment from "moment";
-import Button from "../../ui-components/Button/Button";
+
+import Title from "./components/Title/Title";
+import CommonInfo from "./components/CommonInfo/CommonInfo";
+import Contacts from "./components/Contacts/Contacts";
+import Photos from "./components/Photos/Photos";
+
+import "./DetailedInfo.styles.scss";
+
+const companyId = 12;
 
 const DetailedInfo = () => {
-  const [data, setData] = useState<any>(null);
-  const [dataContacts, setDataContacts] = useState<any>(null);
-  const [isEditTitle, setIsEditTitle] = useState<boolean>(false);
-  const [isEditInfo, setIsEditInfo] = useState<boolean>(false);
-  const [isEditContacts, setIsEditContacts] = useState<boolean>(false);
+  const [companyData, setCompanyData] = useState<any>(null);
+  const [contactsData, setContactsData] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getCompany(12).then((resp) => resp.json());
-      setData(data);
+      const data = await getCompany(companyId).then((resp) => resp.json());
+      setCompanyData(data);
 
-      const dataContacts = await getContacts(16).then((resp) => resp.json());
-      setDataContacts(dataContacts);
+      const dataContacts = await getContacts(data.contactId).then(
+        (resp) => resp.json()
+      );
+      setContactsData(dataContacts);
     };
     fetchData();
   }, []);
@@ -53,13 +57,40 @@ const DetailedInfo = () => {
   };
 
   const deleteItem = () => {
-    deleteCompany("12");
+    deleteCompany(companyId);
     setModalIsOpen(false);
 
     navigate("/companies");
   };
 
-  if (!data || !dataContacts)
+  const onCompanyFormSave = () => {
+    const sendData = {
+      name: companyData.name,
+      shortName: companyData.shortName,
+      businessEntity: companyData.businessEntity,
+      contract: {
+        no: companyData.contract.no,
+        issue_date: companyData.contract.issue_date,
+      },
+      type: companyData.type,
+    };
+
+    updateCompany(companyId, sendData);
+  };
+
+  const onContactsFormSave = () => {
+    const sendData = {
+      lastname: contactsData.lastname,
+      firstname: contactsData.firstname,
+      patronymic: contactsData.patronymic,
+      phone: contactsData.phone,
+      email: contactsData.email,
+    };
+
+    updateContacts(companyData.contactId, sendData);
+  };
+
+  if (!companyData || !contactsData)
     return (
       <div className="detailed-info">
         <div className="spinner"></div>
@@ -70,7 +101,10 @@ const DetailedInfo = () => {
     <div className="detailed-info">
       <div className="detailed-info__bar">
         <div className="detailed-info__goback" onClick={goBack}>
-          <LongLogo /> <span>К СПИСКУ ЮРИДИЧЕСКИХ ЛИЦ</span>
+          <LongLogo />{" "}
+          <span className="detailed-info__goback-title">
+            К СПИСКУ ЮРИДИЧЕСКИХ ЛИЦ
+          </span>
         </div>
         <div className="detailed-info__buttons">
           <LinkedLogo onClick={copyLink} />
@@ -79,251 +113,73 @@ const DetailedInfo = () => {
         </div>
       </div>
       <div className="detailed-info__container">
-        <div className="detailed-info__head">
-          {isEditTitle ? (
-            <>
-              <Input
-                text="Короткое наименование"
-                value={data.shortName}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    shortName: e.target.value,
-                  })
-                }
-              />{" "}
-              <SaveLogo />
-            </>
-          ) : (
-            <>
-              <h2 className="detailed-info__title">{data.shortName}</h2>{" "}
-              <EditButton
-                edit={() => {
-                  setIsEditTitle(true);
-                }}
-              />
-            </>
-          )}
-        </div>
+        <Title
+          name={companyData.shortName}
+          onChange={(shortName) => {
+            setCompanyData((prevDataState: any) => ({
+              ...prevDataState,
+              shortName,
+            }));
+          }}
+          onSave={onCompanyFormSave}
+        />
 
-        {isEditInfo ? (
-          <div className="detailed-info__company">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const sendData = {
-                  name: data.name,
-                  shortName: data.shortName,
-                  businessEntity: data.businessEntity,
-                  contract: {
-                    no: data.contract.no,
-                    issue_date: data.contract.issue_date,
-                  },
-                  type: data.type,
-                };
+        <CommonInfo
+          data={companyData}
+          onChange={(field, value) =>
+            setCompanyData((prevDataState: any) => ({
+              ...prevDataState,
+              [field]: value,
+            }))
+          }
+          onSave={onCompanyFormSave}
+        />
 
-                updateCompany("12", sendData);
-                setIsEditInfo(false);
-              }}
-            >
-              <div className="detailed-info__head">
-                <h3 className="detailed-info__section-title">
-                  ОБЩАЯ ИНФОРМАЦИЯ
-                </h3>{" "}
-                <button type="submit">
-                  <SaveLogo />
-                </button>
-              </div>
+        <div className="border" />
 
-              <Input
-                text="Полное название"
-                value={data.name}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    name: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Номер договора"
-                value={data.contract.no}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    contract: { ...data.contract, no: e.target.value },
-                  })
-                }
-              />
-              <Input
-                text="Дата договора"
-                value={data.contract.issue_date}
-                // date={true}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    contract: { ...data.contract, issue_date: e.target.value },
-                  })
-                }
-              />
-              <Input
-                text="Форма"
-                value={data.businessEntity}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    businessEntity: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Тип"
-                value={data.type}
-                onChange={(e: any) =>
-                  setData({
-                    ...data,
-                    type: e.target.value,
-                  })
-                }
-              />
-            </form>
-          </div>
-        ) : (
-          <div className="detailed-info__company">
-            <div className="detailed-info__head">
-              <h3 className="detailed-info__section-title">ОБЩАЯ ИНФОРМАЦИЯ</h3>{" "}
-              <EditButton
-                edit={() => {
-                  setIsEditInfo(true);
-                }}
-              />
-            </div>
-            <div>
-              <h4 className="detailed-info__label">Полное название:</h4>
-              <span>{data.name}</span>
-              <h4 className="detailed-info__label">Договор:</h4>
-              <span>
-                {data.contract.no} от{" "}
-                {moment(data.contract.issue_date).format("DD.MM.YYYY")}
-              </span>
-              <h4 className="detailed-info__label">Форма:</h4>
-              <span>{data.businessEntity}</span>
-              <h4 className="detailed-info__label">Тип:</h4>
-              {data.type.map((item: string) => (
-                <span>{item === "agent" ? "Агент" : "Подрядчик"}</span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="border"></div>
-        <div className="detailed-info__contact">
-          {isEditContacts ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const sendData = {
-                  lastname: dataContacts.lastname,
-                  firstname: dataContacts.firstname,
-                  patronymic: dataContacts.patronymic,
-                  phone: dataContacts.phone,
-                  email: dataContacts.email,
-                };
-
-                updateContacts("16", sendData);
-                setIsEditContacts(false);
-              }}
-            >
-              <div className="detailed-info__head">
-                <h3 className="detailed-info__section-title">
-                  КОНТАКТНЫЕ ДАННЫЕ
-                </h3>{" "}
-                <button type="submit">
-                  <SaveLogo />
-                </button>
-              </div>
-              <Input
-                text="Фамилия"
-                value={dataContacts.lastname}
-                onChange={(e: any) =>
-                  setDataContacts({
-                    ...dataContacts,
-                    lastname: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Имя"
-                value={dataContacts.firstname}
-                onChange={(e: any) =>
-                  setDataContacts({
-                    ...dataContacts,
-                    firstname: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Отчество"
-                value={dataContacts.patronymic}
-                onChange={(e: any) =>
-                  setDataContacts({
-                    ...dataContacts,
-                    patronymic: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Телефон:"
-                value={dataContacts.phone}
-                onChange={(e: any) =>
-                  setDataContacts({
-                    ...dataContacts,
-                    phone: e.target.value,
-                  })
-                }
-              />
-              <Input
-                text="Эл. почта:"
-                value={dataContacts.email}
-                onChange={(e: any) =>
-                  setDataContacts({
-                    ...dataContacts,
-                    email: e.target.value,
-                  })
-                }
-              />
-            </form>
-          ) : (
-            <>
-              <div className="detailed-info__head">
-                <h3 className="detailed-info__section-title">
-                  КОНТАКТНЫЕ ДАННЫЕ
-                </h3>{" "}
-                <EditButton
-                  edit={() => {
-                    setIsEditContacts(true);
-                  }}
-                />
-              </div>
-              <h4 className="detailed-info__label">ФИО:</h4>
-              <span>
-                {dataContacts.lastname} {dataContacts.firstname}
-                {dataContacts.patronymic}
-              </span>
-              <h4 className="detailed-info__label">Телефон:</h4>
-              <span>{dataContacts.phone}</span>
-              <h4 className="detailed-info__label">Эл. почта:</h4>
-              <span>{dataContacts.email}</span>
-            </>
-          )}
+        <div className="detailed-info__section">
+          <Contacts
+            data={contactsData}
+            onChange={(field, value) =>
+              setContactsData((prevDataContacts: any) => ({
+                ...prevDataContacts,
+                [field]: value,
+              }))
+            }
+            onSave={onContactsFormSave}
+          />
           <br />
         </div>
         <div className="border"></div>
-        <div className="detailed-info__photo">
-          <h3 className="detailed-info__section-title">ПРИЛОЖЕННЫЕ ФОТО</h3>
-          <Button name="ДОБАВИТЬ ИЗОБРАЖЕНИЕ" />
+        <div className="detailed-info__section">
+          <Photos
+            images={companyData.photos}
+            onUpload={(files) => {
+              Promise.all(
+                files.map((file) =>
+                  addImage(companyId, file).then((response) => response.json())
+                )
+              ).then((photos) => {
+                setCompanyData((prevCompanyDataState: any) => ({
+                  ...prevCompanyDataState,
+                  photos: [...prevCompanyDataState.photos, ...photos],
+                }));
+              });
+            }}
+            onRemove={(filename) => {
+              deleteImage(companyId, filename).then(() => {
+                setCompanyData((prevCompanyDataState: any) => ({
+                  ...prevCompanyDataState,
+                  photos: companyData.photos.filter(
+                    (photo: any) => photo.name !== filename
+                  ),
+                }));
+              });
+            }}
+          />
         </div>
         <div className="border"></div>
+
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={() => setModalIsOpen(false)}

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { ReactComponent as HomeLogo } from "../../assets/Home.svg";
 import { ReactComponent as CompanyLogo } from "../../assets/Market.svg";
@@ -11,6 +11,7 @@ import { ReactComponent as ExitLogo } from "../../assets/Exit.svg";
 import "./Layout.styles.scss";
 
 const Layout = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="menu">
@@ -52,6 +53,8 @@ const Layout = () => {
               to="exit"
               onClick={() => {
                 sessionStorage.removeItem("tokenData");
+                navigate('/');
+                window.location.reload();
               }}
             >
               <ExitLogo className="menu__icon" />

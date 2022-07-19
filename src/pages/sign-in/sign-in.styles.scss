@@ -1,0 +1,20 @@
+.sign-in {
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  margin: auto;
+  justify-content: center;
+
+  &__button {
+    width: 200px;
+    height: 40px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #82b284;
+    background-color: #fff;
+    cursor: pointer;
+    align-items: center;
+  }
+}

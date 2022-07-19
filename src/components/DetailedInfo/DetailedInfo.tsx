@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as LinkedLogo } from "../../assets/Linked.svg";
-import { ReactComponent as RotationLogo } from "../../assets/Rotation.svg";
-import { ReactComponent as DeleteLogo } from "../../assets/Delete.svg";
-import { ReactComponent as LongLogo } from "../../assets/Long.svg";
 import Modal from "react-modal";
 import {
   addImage,
@@ -14,6 +10,13 @@ import {
   updateCompany,
   updateContacts,
 } from "../../api";
+import { Company } from "../../types/company";
+import { Contact } from "../../types/contact";
+
+import { ReactComponent as LinkedLogo } from "../../assets/Linked.svg";
+import { ReactComponent as RotationLogo } from "../../assets/Rotation.svg";
+import { ReactComponent as DeleteLogo } from "../../assets/Delete.svg";
+import { ReactComponent as LongLogo } from "../../assets/Long.svg";
 
 import Title from "./components/Title/Title";
 import CommonInfo from "./components/CommonInfo/CommonInfo";
@@ -22,19 +25,19 @@ import Photos from "./components/Photos/Photos";
 
 import "./DetailedInfo.styles.scss";
 
-const companyId = 12;
+const companyId = "12";
 
 const DetailedInfo = () => {
-  const [companyData, setCompanyData] = useState<any>(null);
-  const [contactsData, setContactsData] = useState<any>(null);
+  const [companyData, setCompanyData] = useState<Company | null>(null);
+  const [contactsData, setContactsData] = useState<Contact | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getCompany(companyId).then((resp) => resp.json());
       setCompanyData(data);
 
-      const dataContacts = await getContacts(data.contactId).then(
-        (resp) => resp.json()
+      const dataContacts = await getContacts(data.contactId).then((resp) =>
+        resp.json()
       );
       setContactsData(dataContacts);
     };
@@ -44,7 +47,7 @@ const DetailedInfo = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  const goBack = () => navigate(-1);
+  const goBack = () => navigate('/companies');
 
   const copyLink = () => {
     navigator.clipboard.writeText(window.location.href).catch((err) => {
@@ -56,22 +59,72 @@ const DetailedInfo = () => {
     window.location.reload();
   };
 
-  const deleteItem = () => {
+  const onCompanyRemove = () => {
     deleteCompany(companyId);
     setModalIsOpen(false);
 
     navigate("/companies");
   };
 
+  const onTitleChange = (shortName: string) => {
+    setCompanyData((prevDataState) =>
+      prevDataState ? { ...prevDataState, shortName } : null
+    );
+  };
+
+  const onCommonInfoChange = (field: string, value: unknown) =>
+    setCompanyData((prevDataState) =>
+      prevDataState ? { ...prevDataState, [field]: value } : null
+    );
+
+  const onContactsChange = (field: string, value: unknown) =>
+    setContactsData((prevContactsDataState) =>
+      prevContactsDataState
+        ? { ...prevContactsDataState, [field]: value }
+        : null
+    );
+
+  const onImageUpload = (files: File[]) => {
+    Promise.all(
+      files.map((file) =>
+        addImage(companyId, file).then((response) => response.json())
+      )
+    ).then((photos) => {
+      setCompanyData((prevCompanyDataState) =>
+        prevCompanyDataState
+          ? {
+              ...prevCompanyDataState,
+              photos: [...prevCompanyDataState.photos, ...photos],
+            }
+          : null
+      );
+    });
+  };
+
+  const onImageRemove = (filename: string) => {
+    if (!companyData) return;
+
+    deleteImage(companyId, filename).then(() => {
+      setCompanyData((prevCompanyDataState) =>
+        prevCompanyDataState
+          ? {
+              ...prevCompanyDataState,
+              photos: companyData.photos.filter(
+                (photo) => photo.name !== filename
+              ),
+            }
+          : null
+      );
+    });
+  };
+
   const onCompanyFormSave = () => {
+    if (!companyData) return;
+
     const sendData = {
       name: companyData.name,
       shortName: companyData.shortName,
       businessEntity: companyData.businessEntity,
-      contract: {
-        no: companyData.contract.no,
-        issue_date: companyData.contract.issue_date,
-      },
       type: companyData.type,
     };
 
@@ -79,6 +132,8 @@ const DetailedInfo = () => {
   };
 
   const onContactsFormSave = () => {
+    if (!companyData || !contactsData) return;
+
     const sendData = {
       lastname: contactsData.lastname,
       firstname: contactsData.firstname,
@@ -115,23 +170,13 @@ const DetailedInfo = () => {
       <div className="detailed-info__container">
         <Title
           name={companyData.shortName}
-          onChange={(shortName) => {
-            setCompanyData((prevDataState: any) => ({
-              ...prevDataState,
-              shortName,
-            }));
-          }}
+          onChange={onTitleChange}
           onSave={onCompanyFormSave}
         />
 
         <CommonInfo
           data={companyData}
-          onChange={(field, value) =>
-            setCompanyData((prevDataState: any) => ({
-              ...prevDataState,
-              [field]: value,
-            }))
-          }
+          onChange={onCommonInfoChange}
           onSave={onCompanyFormSave}
         />
 
@@ -140,42 +185,16 @@ const DetailedInfo = () => {
         <div className="detailed-info__section">
           <Contacts
             data={contactsData}
-            onChange={(field, value) =>
-              setContactsData((prevDataContacts: any) => ({
-                ...prevDataContacts,
-                [field]: value,
-              }))
-            }
+            onChange={onContactsChange}
             onSave={onContactsFormSave}
           />
-          <br />
         </div>
         <div className="border"></div>
         <div className="detailed-info__section">
           <Photos
             images={companyData.photos}
-            onUpload={(files) => {
-              Promise.all(
-                files.map((file) =>
-                  addImage(companyId, file).then((response) => response.json())
-                )
-              ).then((photos) => {
-                setCompanyData((prevCompanyDataState: any) => ({
-                  ...prevCompanyDataState,
-                  photos: [...prevCompanyDataState.photos, ...photos],
-                }));
-              });
-            }}
-            onRemove={(filename) => {
-              deleteImage(companyId, filename).then(() => {
-                setCompanyData((prevCompanyDataState: any) => ({
-                  ...prevCompanyDataState,
-                  photos: companyData.photos.filter(
-                    (photo: any) => photo.name !== filename
-                  ),
-                }));
-              });
-            }}
+            onUpload={onImageUpload}
+            onRemove={onImageRemove}
           />
         </div>
         <div className="border"></div>
@@ -186,11 +205,21 @@ const DetailedInfo = () => {
           contentLabel="Удалить карточку"
           className="modal"
         >
-          <h2>Удалить карточку</h2>
+          <h2 className="modal__title">Удалить карточку</h2>
           <div>Отправить карточку организации в архив?</div>
           <div className="button-container">
-            <button onClick={() => setModalIsOpen(false)}>ОТМЕНА</button>
-            <button onClick={deleteItem}>УДАЛИТЬ</button>
+            <button
+              className="button-container__button"
+              onClick={() => setModalIsOpen(false)}
+            >
+              ОТМЕНА
+            </button>
+            <button
+              className="button-container__button button-container__button_green"
+              onClick={onCompanyRemove}
+            >
+              УДАЛИТЬ
+            </button>
           </div>
         </Modal>
       </div>

@@ -10,25 +10,27 @@
     .active {
       background: #a4c7a5;
     }
-
-    a {
-      display: flex;
-      width: 48px;
-      height: 60px;
-      margin: auto;
-
-      svg {
-        margin: auto;
-      }
-    }
+  }
+  &__link {
+    display: flex;
+    width: 48px;
+    height: 60px;
+    margin: auto;
+  }
+  &__icon {
+    margin: auto;
   }
 }
 
-footer {
+.footer {
   flex-basis: 100%;
   color: #b9b9b9;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   padding: 32px 0 46px;
+
+  &__copyright {
+    margin-bottom: 16px;
+  }
 }

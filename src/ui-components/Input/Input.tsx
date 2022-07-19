@@ -1,22 +1,18 @@
 import React, { FC } from "react";
+
+import { InputProps } from "./Input.types";
+
 import "./Input.styles.scss";
 
-interface Props {
-  text: string;
-  value: string;
-  date?: boolean;
-  onChange?: (value: any) => void;
-}
-
-const Input: FC<Props> = ({ text, value, date = false, onChange}) => {
+const Input: FC<InputProps> = ({ text, value, onChange }) => {
   return (
     <div className="input-block">
       {value && <label className="input-block__label">{text}</label>}
       <input
+        className="input-block__input"
         placeholder={text}
         value={value}
-        type={date ? "date" : "text"}
-        onChange={onChange && ((value) =>  onChange(value))}
+        onChange={(value) => onChange?.(value)}
       />
     </div>
   );

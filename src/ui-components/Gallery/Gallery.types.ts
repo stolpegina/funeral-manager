@@ -1,6 +1,6 @@
 import { CompanyPhoto } from "../../types/company";
 
-export interface PreviewImagesProps {
+export interface GalleryProps {
   images: CompanyPhoto[];
   onRemove: (name: string) => void;
 }

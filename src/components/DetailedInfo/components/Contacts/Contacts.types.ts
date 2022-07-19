@@ -1,5 +1,7 @@
+import { Contact } from "../../../../types/contact";
+
 export interface ContactsProps {
-  data: any;
-  onChange: (field: string, value: any) => void;
+  data: Contact;
+  onChange: (field: string, value: unknown) => void;
   onSave: () => void;
 }

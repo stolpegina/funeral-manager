@@ -1,5 +1,6 @@
 .side-menu {
   background: #f7f7f7;
+  min-width: 230px;
 
   &__info {
     margin: 20px 42px;
@@ -15,13 +16,14 @@
     font-weight: 600;
     font-size: 14px;
     display: flex;
-  
+    gap: 12px;
   }
 
   &__title {
     font-weight: 700;
     font-size: 16px;
     margin-bottom: 2px;
+    line-height: 26px;
   }
 
   &__position {

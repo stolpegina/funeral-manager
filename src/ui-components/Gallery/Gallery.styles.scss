@@ -1,0 +1,44 @@
+.thumb {
+  display: inline-flex;
+  border-radius: 2px;
+  border: 1px solid #eaeaea;
+  margin-bottom: 8px;
+  margin-right: 24px;
+  width: 160px;
+  height: 160px;
+  box-sizing: border-box;
+
+  &__inner {
+    display: flex;
+    min-width: 0;
+  }
+
+  &__img {
+    display: block;
+    width: auto;
+    height: 100%;
+  }
+
+  &__remove {
+    margin: 8px;
+    cursor: pointer;
+  }
+
+  &__name {
+    color: #3b3b3b;
+    font-size: 12px;
+  }
+}
+.photo {
+  &__container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  &__row {
+    display: flex;
+    margin-bottom: 20px;
+  }
+}

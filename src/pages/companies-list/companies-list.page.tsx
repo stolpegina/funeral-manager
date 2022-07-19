@@ -2,14 +2,19 @@ import React, { useEffect, useState } from "react";
 import { getCompany } from "../../api";
 import CompanyItem from "../../components/CompanyItem/CompanyItem";
 import SideMenu from "../../components/SideMenu/SideMenu";
+
+import { Company } from "../../types/company";
+
 import "./companies-list.styles.scss";
 
+const companyId = "12";
+
 const CompaniesList = () => {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<Company | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       // В будущем этот запрос необходимо заменить на запрос списка организаций
-      const data = await getCompany(12).then((resp) => resp.json());
+      const data = await getCompany(companyId).then((resp) => resp.json());
       setData(data);
     };
     fetchData();

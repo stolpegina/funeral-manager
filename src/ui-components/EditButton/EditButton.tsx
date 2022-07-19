@@ -1,15 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC } from "react";
 import { ReactComponent as EditLogo } from "../../assets/Edit.svg";
-import './EditButton.styles.scss';
 
-interface iButton { 
-    edit: () => void;
-}
+import { EditButtonProps } from "./EditButton.types";
 
-const EditButton: FC<iButton> = ({ edit }) => {
+import "./EditButton.styles.scss";
+
+const EditButton: FC<EditButtonProps> = ({ edit }) => {
   return (
     <div>
-      <button className='edit-button' onClick={() => edit()}>
+      <button className="edit-button" onClick={() => edit()}>
         <EditLogo />
       </button>
     </div>

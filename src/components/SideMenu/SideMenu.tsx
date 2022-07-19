@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./SideMenu.styles.scss";
+
 import { ReactComponent as BuildingLogo } from "../../assets/Building.svg";
+
+import "./SideMenu.styles.scss";
 
 const SideMenu = () => {
   return (

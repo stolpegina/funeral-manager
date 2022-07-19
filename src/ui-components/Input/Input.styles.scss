@@ -11,19 +11,23 @@
     font-size: 10px;
     color: #808080;
   }
-}
-input {
-  width: 400px;
-  height: 40px;
-  border: 1px solid #cdcdcd;
-  border-radius: 2px;
-  padding: 0 10px;
 
-  &:hover {
-    border: 1px solid #808080;
-  }
+  &__input {
+    width: 400px;
+    height: 40px;
+    border: 1px solid #cdcdcd;
+    border-radius: 2px;
+    padding: 0 10px;
 
-  &:focus, &:active, &:focus-visible {
-    border: 1px solid #3b3b3b;
+    &:hover {
+      border: 1px solid #808080;
+    }
+
+    &:focus,
+    &:active,
+    &:focus-visible {
+      border: 1px solid #3b3b3b;
+      outline: none;
+    }
   }
 }

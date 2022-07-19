@@ -29,7 +29,7 @@
     margin-left: 18px;
   }
 
-  &__section{
+  &__section {
     margin-bottom: 32px;
   }
 
@@ -59,8 +59,35 @@
     padding: 0;
     display: flex;
   }
+
+  &__frame {
+    display: flex;
+    margin-bottom: 12px;
+  }
   &__label {
-    display: inline-block;
+    width: 180px;
+  }
+
+  &__checkbox-container {
+    position: relative;
+    margin: 12px 12px 12px 0;
+  }
+
+  &__checkbox-label {
+    position: absolute;
+    top: -8px;
+    background-color: white;
+    margin-left: 10px;
+    padding: 0 5px;
+    font-size: 10px;
+    color: #808080;
+  }
+
+  &__checkbox {
+    padding: 8px;
+    border: 1px solid #cdcdcd;
+    border-radius: 2px;
+    width: 404px;
   }
 }
 .border {
@@ -82,18 +109,27 @@
   box-shadow: 5px 5px 5px #e5e5e5;
   border: 1px solid #e5e5e5;
 
-  button {
-    color: #b9b9b9;
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-top: 20px;
-    padding: 0;
+  &__title {
+    margin-bottom: 16px;
   }
 
   .button-container {
     display: flex;
     justify-content: space-between;
+    margin-top: 50px;
+
+    &__button {
+      color: #b9b9b9;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      padding: 0;
+
+      &_green {
+        color: #82b284;
+      }
+    }
   }
 }
 

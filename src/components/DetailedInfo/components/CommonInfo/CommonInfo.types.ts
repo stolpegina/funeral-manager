@@ -1,5 +1,7 @@
+import { Company } from "../../../../types/company";
+
 export interface CommonInfoProps {
-  data: any;
-  onChange: (field: string, value: any) => void;
+  data: Company;
+  onChange: (field: string, value: unknown) => void;
   onSave: () => void;
 }

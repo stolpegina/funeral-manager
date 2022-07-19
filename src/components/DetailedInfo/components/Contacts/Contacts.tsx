@@ -27,36 +27,36 @@ const Contacts: FC<ContactsProps> = ({ data, onChange, onSave }) => {
         <Input
           text="Фамилия"
           value={data.lastname}
-          onChange={(e: any) => {
+          onChange={(e) => {
             onChange("lastname", e.target.value);
           }}
         />
         <Input
           text="Имя"
           value={data.firstname}
-          onChange={(e: any) => {
+          onChange={(e) => {
             onChange("firstname", e.target.value);
           }}
         />
         <Input
           text="Отчество"
           value={data.patronymic}
-          onChange={(e: any) => {
+          onChange={(e) => {
             onChange("patronymic", e.target.value);
           }}
         />
         <Input
           text="Телефон:"
           value={data.phone}
-          onChange={(e: any) => {
+          onChange={(e) => {
             onChange("phone", e.target.value);
           }}
         />
         <Input
           text="Эл. почта:"
           value={data.email}
-          onChange={(e: any) => {
-            onChange("email", e.target.email);
+          onChange={(e) => {
+            onChange("email", e.target.value);
           }}
         />
       </form>
@@ -73,15 +73,21 @@ const Contacts: FC<ContactsProps> = ({ data, onChange, onSave }) => {
           }}
         />
       </div>
-      <h4 className="detailed-info__label">ФИО:</h4>
-      <span>
-        {data.lastname} {data.firstname}
-        {data.patronymic}
-      </span>
-      <h4 className="detailed-info__label">Телефон:</h4>
-      <span>{data.phone}</span>
-      <h4 className="detailed-info__label">Эл. почта:</h4>
-      <span>{data.email}</span>
+      <div className="detailed-info__frame">
+        <h4 className="detailed-info__label">ФИО:</h4>
+        <span>
+          {data.lastname} {data.firstname} {" "}
+          {data.patronymic}
+        </span>
+      </div>
+      <div className="detailed-info__frame">
+        <h4 className="detailed-info__label">Телефон:</h4>
+        <span>{data.phone}</span>
+      </div>
+      <div className="detailed-info__frame">
+        <h4 className="detailed-info__label">Эл. почта:</h4>
+        <span>{data.email}</span>
+      </div>
     </>
   );
 };

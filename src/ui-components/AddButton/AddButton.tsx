@@ -1,17 +1,15 @@
 import React, { FC } from 'react';
-import './AddButton.styles.scss';
 
-interface Props { 
-    name: string;
-    onClick: () => void;
-}
+import { AddButtonProps } from './AddButton.types';
 
-const Button: FC<Props> = ({ name, onClick }) => {
+import "./AddButton.styles.scss";
+
+const Button: FC<AddButtonProps> = ({ name, onClick }) => {
   return (
     <div>
-      <button className="button" onClick={onClick}>
-        <div className="button__plus">+</div>
-        <div className="button__text">{name}</div>
+      <button className="add-button" onClick={onClick}>
+        <div className="add-button__plus">+</div>
+        <div className="add-button__text">{name}</div>
       </button>
     </div>
   );

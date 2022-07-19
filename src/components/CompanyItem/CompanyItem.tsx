@@ -1,13 +1,11 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { getCompany } from "../../api";
+
+import { CompanyItemProps } from "./CompanyItem.types";
+
 import "./CompanyItem.styles.scss";
 
-interface Props {
-  name: any;
-}
-
-const CompanyItem: FC<Props> = ({ name }) => {
+const CompanyItem: FC<CompanyItemProps> = ({ name }) => {
   return (
     <Link className="company-item" to="company-detail">
       {name}

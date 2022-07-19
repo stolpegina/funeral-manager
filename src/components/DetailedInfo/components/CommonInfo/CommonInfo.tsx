@@ -3,12 +3,20 @@ import moment from "moment";
 import Input from "../../../../ui-components/Input/Input";
 
 import { CommonInfoProps } from "./CommonInfo.types";
+import { CompanyType } from "../../../../types/company";
 
 import { ReactComponent as EditLogo } from "../../../../assets/Edit.svg";
 import { ReactComponent as SaveLogo } from "../../../../assets/Save.svg";
+import Checkbox from "../../../../ui-components/Checkbox/Checkbox";
 
 const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+  let type: string[] = [];
+  data.type.forEach((item) => {
+    if (item === CompanyType.Agent) type.push("Агент");
+    if (item === CompanyType.Contractor) type.push("Подрядчик");
+  });
 
   if (isEditMode)
     return (
@@ -30,41 +38,40 @@ const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
           <Input
             text="Полное название"
             value={data.name}
-            onChange={(e: any) => {
+            onChange={(e) => {
               onChange("name", e.target.value);
-            }}
-          />
-          <Input
-            text="Номер договора"
-            value={data.contract.no}
-            onChange={(e: any) => {
-              onChange("contract", { ...data.contract, no: e.target.value });
-            }}
-          />
-          <Input
-            text="Дата договора"
-            value={data.contract.issue_date}
-            onChange={(e: any) => {
-              onChange("contract", {
-                ...data.contract,
-                issue_date: e.target.value,
-              });
             }}
           />
           <Input
             text="Форма"
             value={data.businessEntity}
-            onChange={(e: any) => {
+            onChange={(e) => {
               onChange("businessEntity", e.target.value);
             }}
           />
-          <Input
+          {/* TODO: Заменить на компонент Checkbox */}
+          {/* <Input
             text="Тип"
             value={data.type}
-            onChange={(e: any) => {
+            onChange={(e) => {
               onChange("type", e.target.value);
             }}
-          />
+          /> */}
+          <div className="detailed-info__checkbox-container">
+            <label className="detailed-info__checkbox-label">Тип</label>
+            <div className="detailed-info__checkbox">
+              {data.type.map((item) => (
+                <Checkbox
+                  name={item}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      onChange("type", [item]);
+                    }
+                  }}
+                />
+              ))}
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -81,19 +88,25 @@ const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
         />
       </div>
       <div>
-        <h4 className="detailed-info__label">Полное название:</h4>
-        <span>{data.name}</span>
-        <h4 className="detailed-info__label">Договор:</h4>
-        <span>
-          {data.contract.no} от{" "}
-          {moment(data.contract.issue_date).format("DD.MM.YYYY")}
-        </span>
-        <h4 className="detailed-info__label">Форма:</h4>
-        <span>{data.businessEntity}</span>
-        <h4 className="detailed-info__label">Тип:</h4>
-        {data.type.map((item: string) => (
-          <span>{item === "agent" ? "Агент" : "Подрядчик"}</span>
-        ))}
+        <div className="detailed-info__frame">
+          <h4 className="detailed-info__label">Полное название:</h4>
+          <span>{data.name}</span>
+        </div>
+        <div className="detailed-info__frame">
+          <h4 className="detailed-info__label">Договор:</h4>
+          <span>
+            {data.contract.no} от{" "}
+            {moment(data.contract.issue_date).format("DD.MM.YYYY")}
+          </span>
+        </div>
+        <div className="detailed-info__frame">
+          <h4 className="detailed-info__label">Форма:</h4>
+          <span>{data.businessEntity}</span>
+        </div>
+        <div className="detailed-info__frame">
+          <h4 className="detailed-info__label">Тип:</h4>
+          <span>{type.join(", ")}</span>
+        </div>
       </div>
     </div>
   );

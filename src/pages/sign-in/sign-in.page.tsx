@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../../api";
 import Input from "../../ui-components/Input/Input";
 
 const SignIn = () => {
-  const [username, setusername] = useState('')
-  const saveToken = (token: any) => {
-    sessionStorage.setItem("tokenData", token);
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
+
+  const saveToken = (token: string | null) => {
+    sessionStorage.setItem("tokenData", token ?? "");
   };
 
-  const resp = auth('username');
+  const onSubmit = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    auth(username).then((res) => {
+      if (res.status === 200) {
+        const tokenData = res.headers.get("Authorization");
+        saveToken(tokenData);
+        navigate("/companies");
+        window.location.reload();
+      }
+    });
+  };
 
-  resp.then((res) => {
-    if (res.status === 200) {
-      const tokenData = res.headers.get("Authorization");
-      console.log(tokenData);
-      
-      saveToken(tokenData);
-      return Promise.resolve();
-    }
-    return Promise.reject();
-  });
   return (
-    <form onSubmit={(e) => {
-      auth(username);
-    }}>
+    <form onSubmit={onSubmit}>
       <Input
         text="Логин"
         value={username}
-        onChange={(e) => setusername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <button type="submit">Войти</button>
     </form>

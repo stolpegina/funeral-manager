@@ -11,7 +11,7 @@ export const auth = (username: string) => {
 export const getCompany = (id: string) => {
   const response = fetch(`/companies/${id}`, {
     method: "GET",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
   });
   return response;
 };
@@ -22,7 +22,7 @@ export const updateCompany = (
 ) => {
   const response = fetch(`/companies/${id}`, {
     method: "PATCH",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
   return response;
@@ -31,7 +31,7 @@ export const updateCompany = (
 export const deleteCompany = (id: string) => {
   const response = fetch(`/companies/${id}`, {
     method: "DELETE",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
   });
   return response;
 };
@@ -39,7 +39,7 @@ export const deleteCompany = (id: string) => {
 export const getContacts = (id: string) => {
   const response = fetch(`/contacts/${id}`, {
     method: "GET",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
   });
   return response;
 };
@@ -47,7 +47,7 @@ export const getContacts = (id: string) => {
 export const updateContacts = (id: string, data: Omit<Contact, "id">) => {
   const response = fetch(`/contacts/${id}`, {
     method: "PATCH",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
     body: JSON.stringify(data),
   });
   return response;
@@ -59,7 +59,7 @@ export const addImage = (id: string, file: File) => {
 
   const response = fetch(`/companies/${id}/image`, {
     method: "POST",
-    headers: { Authorization: getResponseHeaders().Authorization },
+    headers: { Authorization: getRequestHeaders().Authorization },
     body: formData,
   });
   return response;
@@ -68,12 +68,12 @@ export const addImage = (id: string, file: File) => {
 export const deleteImage = (id: string, imageName: string) => {
   const response = fetch(`/companies/${id}/image/${imageName}`, {
     method: "DELETE",
-    headers: getResponseHeaders(),
+    headers: getRequestHeaders(),
   });
   return response;
 };
 
-const getResponseHeaders = () => ({
+const getRequestHeaders = () => ({
   Authorization: sessionStorage.getItem("tokenData") ?? "",
   "Content-Type": "application/json",
 });

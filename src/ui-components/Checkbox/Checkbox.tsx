@@ -2,9 +2,8 @@ import React, { FC } from "react";
 import { CheckboxProps } from "./Checkbox.types";
 
 import "./Checkbox.styles.scss";
-import { CompanyType } from "../../types/company";
 
-const Checkbox: FC<CheckboxProps> = ({ name, onChange }) => {
+const Checkbox: FC<CheckboxProps> = ({ name, label, checked, onChange }) => {
   return (
     <div className="checkbox">
       <input
@@ -12,11 +11,10 @@ const Checkbox: FC<CheckboxProps> = ({ name, onChange }) => {
         type="checkbox"
         id={name}
         name={name}
-        onChange={(e) => onChange?.(e)}
+        checked={checked}
+        onChange={onChange}
       />
-      <label htmlFor={name}>
-        {name === CompanyType.Agent ? "Агент" : "Подрядчик"}
-      </label>
+      <label htmlFor={name}>{label}</label>
     </div>
   );
 };

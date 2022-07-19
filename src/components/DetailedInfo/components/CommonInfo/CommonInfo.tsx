@@ -1,22 +1,27 @@
 import React, { FC, useState } from "react";
 import moment from "moment";
 import Input from "../../../../ui-components/Input/Input";
+import Checkbox from "../../../../ui-components/Checkbox/Checkbox";
 
 import { CommonInfoProps } from "./CommonInfo.types";
 import { CompanyType } from "../../../../types/company";
 
 import { ReactComponent as EditLogo } from "../../../../assets/Edit.svg";
 import { ReactComponent as SaveLogo } from "../../../../assets/Save.svg";
-import Checkbox from "../../../../ui-components/Checkbox/Checkbox";
 
 const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-  let type: string[] = [];
-  data.type.forEach((item) => {
-    if (item === CompanyType.Agent) type.push("Агент");
-    if (item === CompanyType.Contractor) type.push("Подрядчик");
-  });
+  const typeNames: Record<CompanyType, string> = {
+    [CompanyType.Agent]: "Агент",
+    [CompanyType.Contractor]: "Подрядчик",
+  };
+
+  // let type: string[] = [];
+  // data.type.forEach((item) => {
+  //   if (item === CompanyType.Agent) type.push("Агент");
+  //   if (item === CompanyType.Contractor) type.push("Подрядчик");
+  // });
 
   if (isEditMode)
     return (
@@ -49,24 +54,20 @@ const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
               onChange("businessEntity", e.target.value);
             }}
           />
-          {/* TODO: Заменить на компонент Checkbox */}
-          {/* <Input
-            text="Тип"
-            value={data.type}
-            onChange={(e) => {
-              onChange("type", e.target.value);
-            }}
-          /> */}
           <div className="detailed-info__checkbox-container">
             <label className="detailed-info__checkbox-label">Тип</label>
             <div className="detailed-info__checkbox">
-              {data.type.map((item) => (
+              {Object.entries(typeNames).map(([key, value]) => (
                 <Checkbox
-                  name={item}
+                  key={key}
+                  name={key}
+                  label={value}
+                  checked={data.type.includes(key as CompanyType)}
                   onChange={(e) => {
-                    if (e.target.checked) {
-                      onChange("type", [item]);
-                    }
+                    const type = e.target.checked
+                      ? [...data.type, key]
+                      : data.type.filter((value) => value !== key);
+                    onChange("type", type);
                   }}
                 />
               ))}
@@ -105,7 +106,7 @@ const CommonInfo: FC<CommonInfoProps> = ({ data, onChange, onSave }) => {
         </div>
         <div className="detailed-info__frame">
           <h4 className="detailed-info__label">Тип:</h4>
-          <span>{type.join(", ")}</span>
+          <span>{data.type.map((type) => typeNames[type]).join(", ")}</span>
         </div>
       </div>
     </div>
